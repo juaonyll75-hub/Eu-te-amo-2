@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Eu te amo meu amor 💜</title>
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+    }
+
+    canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+
+    .bigLove {
+        position: absolute;
+        top: 40%;
+        width: 100%;
+        text-align: center;
+        font-size: 70px;
+        font-weight: bold;
+        background: linear-gradient(90deg, #e879f9, #c084fc, #a855f7, #7e22ce);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 20px #a855f7, 0 0 40px #9333ea;
+        animation: glow 1.5s ease-in-out infinite alternate;
+        user-select: none;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    @keyframes glow {
+        0% { text-shadow: 0 0 10px #a855f7, 0 0 20px #9333ea; }
+        100% { text-shadow: 0 0 20px #e879f9, 0 0 40px #c084fc; }
+    }
+</style>
+</head>
+<body>
+
+<div class="bigLove">EU TE AMO, EDUARDA 💜</div>
+<canvas id="matrix"></canvas>
+
+<script>
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+let columns;
+let drops;
+const fontSize = 16; // menor = mais letras
+
+function setupMatrix() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    columns = Math.floor(canvas.width / fontSize);
+
+    // MAIS LETRAS (dobrado)
+    drops = Array(columns).fill(1).map(() => Math.floor(Math.random() * canvas.height / fontSize));
+}
+
+setupMatrix();
+window.onresize = setupMatrix;
+
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789❤✦✧EEEEE";
+
+const lovePhrases = [
+    "eu te amo","eu te amo","eu te amo",
+    "saudade","eu te amo mil milhões",
+    "minha princesa","minha eduarda",
+    "eduarda","eduarda","eduarda"
+];
+
+function draw() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.06)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+        const text = letters[Math.floor(Math.random() * letters.length)];
+
+        ctx.fillStyle = "#fff"; 
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        ctx.fillStyle = "#c77dff";
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize - fontSize);
+
+        drops[i]++;
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.95) {
+            drops[i] = 0;
+        }
+    }
+}
+
+setInterval(draw, 55); // mais rápido e denso
+
+// CHUVA DE PALAVRAS (muito mais)
+function spawnFallingLoveWord() {
+    const div = document.createElement("div");
+    const phrase = lovePhrases[Math.floor(Math.random() * lovePhrases.length)];
+
+    div.textContent = phrase;
+    div.style.position = "absolute";
+    div.style.left = Math.random() * window.innerWidth + "px";
+    div.style.top = "-40px";
+    div.style.color = phrase === "eduarda" ? "#ffffff" : "#d28bff";
+    div.style.fontSize = "18px";
+    div.style.fontWeight = "bold";
+    div.style.pointerEvents = "none";
+    div.style.textShadow = "0 0 15px #fff, 0 0 30px #c084fc";
+
+    // MAIS LENTO
+    div.style.transition = "transform 10s linear, opacity 10s ease";
+
+    document.body.appendChild(div);
+
+    setTimeout(() => {
+        div.style.transform = "translateY(140vh)";
+        div.style.opacity = "0";
+    }, 50);
+
+    setTimeout(() => div.remove(), 10000);
+}
+
+// MAIS palavras por vez
+setInterval(() => {
+    for (let i = 0; i < 10; i++) {
+        spawnFallingLoveWord();
+    }
+}, 250);
+
+// CLIQUE (mais lento)
+function spawnLoveWord(x, y) {
+    const div = document.createElement("div");
+    const phrase = lovePhrases[Math.floor(Math.random() * lovePhrases.length)];
+
+    div.textContent = phrase;
+    div.style.position = "absolute";
+    div.style.left = x + "px";
+    div.style.top = y + "px";
+    div.style.color = "#fff";
+    div.style.fontSize = "25px";
+    div.style.fontWeight = "bold";
+    div.style.pointerEvents = "none";
+    div.style.textShadow = "0 0 20px #fff, 0 0 40px #c084fc";
+
+    // LENTO AO CLICAR
+    div.style.transition = "transform 6s linear, opacity 6s ease";
+
+    document.body.appendChild(div);
+
+    setTimeout(() => {
+        div.style.transform = "translateY(140vh)";
+        div.style.opacity = "0";
+    }, 50);
+
+    setTimeout(() => div.remove(), 6000);
+}
+
+document.addEventListener("click", (e) => {
+    spawnLoveWord(e.clientX, e.clientY);
+});
+</script>
+
+</body>
+</html>
